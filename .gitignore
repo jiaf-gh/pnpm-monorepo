@@ -1,0 +1,13 @@
+# Deps
+node_modules/
+
+# Env
+.env
+
+# Logs
+logs/
+*.log
+pnpm-debug.log*
+
+# Misc
+.DS_Store
