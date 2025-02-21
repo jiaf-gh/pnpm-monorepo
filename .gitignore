@@ -12,3 +12,7 @@ pnpm-debug.log*
 
 # Misc
 .DS_Store
+
+# Nx
+.nx/cache
+.nx/workspace-data
