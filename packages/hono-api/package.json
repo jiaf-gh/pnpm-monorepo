@@ -6,9 +6,8 @@
   "main": "./dist/index.mjs",
   "scripts": {
     "build": "pkgroll --clean-dist --sourcemap",
-    "serve": "tsx watch src/index.ts",
-    "preview": "node dist/index.mjs",
-    "check": "tsc --noEmit",
+    "dev": "tsx watch src/index.ts",
+    "start": "node dist/index.mjs",
     "lint": "eslint .",
     "lint:fix": "eslint --fix ."
   },

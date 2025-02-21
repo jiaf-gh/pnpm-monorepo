@@ -10,13 +10,10 @@
       ],
       "cache": true
     },
-    "preview": {
+    "start": {
       "dependsOn": [
         "build"
       ]
-    },
-    "check": {
-      "cache": true
     },
     "lint": {
       "cache": true
