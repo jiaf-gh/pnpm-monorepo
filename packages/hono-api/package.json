@@ -1,0 +1,26 @@
+{
+  "name": "@pnpm-monorepo/hono-api",
+  "type": "module",
+  "version": "0.0.1",
+  "description": "A web rest api using Hono.",
+  "main": "./dist/index.mjs",
+  "scripts": {
+    "build": "pkgroll --clean-dist --sourcemap",
+    "serve": "tsx watch src/index.ts",
+    "preview": "node dist/index.mjs",
+    "check": "tsc --noEmit",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix ."
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.13.8",
+    "hono": "^4.7.2"
+  },
+  "devDependencies": {
+    "@pnpm-monorepo/models": "workspace:*",
+    "@pnpm-monorepo/utilities": "workspace:*",
+    "@types/node": "^20.11.17",
+    "pkgroll": "^2.10.0",
+    "tsx": "^4.7.1"
+  }
+}

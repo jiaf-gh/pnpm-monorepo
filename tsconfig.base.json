@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "lib": ["ES2020", "DOM"],
+    "baseUrl": ".",
+    "rootDir": ".",
+    "module": "Node16",
+    "moduleResolution": "node16",
+    "allowJs": true,
+    "strict": true,
+    "declaration": false,
+    "importHelpers": true,
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipDefaultLibCheck": true,
+    "skipLibCheck": true
+  },
+  "exclude": ["node_modules"]
+}
