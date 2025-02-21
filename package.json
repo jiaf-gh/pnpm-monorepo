@@ -1,6 +1,5 @@
 {
   "name": "@pnpm-monorepo/root",
-  "packageManager": "pnpm@10.4.1",
   "description": "A template monorepo using PNPM workspace, and NX as a CI runner.",
   "license": "MIT",
   "engines": {
