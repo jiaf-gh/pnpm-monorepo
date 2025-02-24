@@ -1,0 +1,7 @@
+services:
+  hono-api:
+    build:
+      context: ./
+      dockerfile: ./packages/hono-api/Dockerfile
+    ports:
+      - "3000:3000"
