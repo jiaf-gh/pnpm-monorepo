@@ -1,5 +1,7 @@
 {
   "recommendations": [
-    "dbaeumer.vscode-eslint"
+    "dbaeumer.vscode-eslint",
+    "nrwl.angular-console",
+    "ms-azuretools.vscode-docker"
   ]
 }

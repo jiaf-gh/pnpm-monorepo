@@ -1,11 +1,11 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
-    "lib": ["ES2020", "DOM"],
+    "target": "ES2016",
+    "lib": ["ESNext", "DOM"],
     "baseUrl": ".",
     "rootDir": ".",
-    "module": "Node16",
-    "moduleResolution": "node16",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "allowJs": true,
     "strict": true,
     "declaration": false,
