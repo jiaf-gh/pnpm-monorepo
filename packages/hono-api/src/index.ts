@@ -1,3 +1,4 @@
+import { serve } from '@hono/node-server'
 import { serveStatic } from '@hono/node-server/serve-static'
 import { swaggerUI } from '@hono/swagger-ui'
 import { OpenAPIHono } from '@hono/zod-openapi'
@@ -5,7 +6,6 @@ import { cors } from 'hono/cors'
 import { logger } from 'hono/logger'
 import { prettyJSON } from 'hono/pretty-json'
 import usersRoute from './users'
-import { serve } from '@hono/node-server'
 
 const app = new OpenAPIHono()
 

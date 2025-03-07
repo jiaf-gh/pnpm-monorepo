@@ -1,6 +1,8 @@
-import type { User } from '@pnpm-monorepo/models'
-import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
-import { leaveOnlyNumbers } from '@pnpm-monorepo/utilities'
+import {
+  createRoute,
+  OpenAPIHono,
+  z,
+} from '@hono/zod-openapi'
 import database from './database'
 
 const app = new OpenAPIHono()
@@ -8,38 +10,26 @@ const app = new OpenAPIHono()
 const errorResponse = z.object({
   sucess: z
     .boolean()
-    .openapi({
-      example: false,
-    }),
+    .openapi({ example: false }),
   code: z
     .number()
-    .openapi({
-      example: 400,
-    }),
+    .openapi({ example: 400 }),
   message: z
     .string()
-    .openapi({
-      example: 'Error Message',
-    }),
+    .openapi({ example: 'Error Message' }),
 })
 
 const userResponse = z.object({
   id: z
     .number()
-    .openapi({
-      example: 123,
-    }),
+    .openapi({ example: 123 }),
   name: z
     .string()
     .nullable()
-    .openapi({
-      example: 'John Doe',
-    }),
+    .openapi({ example: 'John Doe' }),
   email: z
     .string()
-    .openapi({
-      example: 'jondoe@email.com',
-    }),
+    .openapi({ example: 'jondoe@email.com' }),
 })
 
 app.openapi(
@@ -51,34 +41,20 @@ app.openapi(
         id: z
           .string()
           .min(1)
-          .openapi({
-            example: '123',
-          }),
+          .openapi({ example: '123' }),
       }),
     },
     responses: {
       200: {
-        content: {
-          'application/json': {
-            schema: userResponse,
-          },
-        },
+        content: { 'application/json': { schema: userResponse } },
         description: 'Success',
       },
       400: {
-        content: {
-          'application/json': {
-            schema: errorResponse,
-          },
-        },
+        content: { 'application/json': { schema: errorResponse } },
         description: 'Bad Request',
       },
       404: {
-        content: {
-          'application/json': {
-            schema: errorResponse,
-          },
-        },
+        content: { 'application/json': { schema: errorResponse } },
         description: 'Not Found',
       },
     },
@@ -87,13 +63,9 @@ app.openapi(
   async (c) => {
     const { id } = c.req.valid('param')
 
-    const user = await database.user.findUnique({
-      where:{
-        id: Number.parseInt(id)
-      }
-    })
+    const user = await database.user.findUnique({ where: { id: Number.parseInt(id) } })
 
-    if(!user) {
+    if (!user) {
       return c.json(
         {
           sucess: false,
@@ -141,27 +113,15 @@ app.openapi(
     },
     responses: {
       200: {
-        content: {
-          'application/json': {
-            schema: userResponse,
-          },
-        },
+        content: { 'application/json': { schema: userResponse } },
         description: 'Success',
       },
       400: {
-        content: {
-          'application/json': {
-            schema: errorResponse,
-          },
-        },
+        content: { 'application/json': { schema: errorResponse } },
         description: 'Bad Request',
       },
       404: {
-        content: {
-          'application/json': {
-            schema: errorResponse,
-          },
-        },
+        content: { 'application/json': { schema: errorResponse } },
         description: 'Not Found',
       },
     },
@@ -174,13 +134,11 @@ app.openapi(
       data: {
         name,
         email,
-        profile: {
-          create: { bio: 'I like turtles' },
-        },
+        profile: { create: { bio: 'I like turtles' } },
       },
     })
 
-    if(!created) {
+    if (!created) {
       return c.json(
         {
           sucess: false,

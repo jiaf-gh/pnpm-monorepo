@@ -7,4 +7,13 @@ export default antfu({
     '**/node_modules/**',
     '**/dist/**',
   ],
+}, {
+  rules: {
+    'node/prefer-global/process': ['off'],
+    'object-curly-newline': ['warn', {
+      multiline: true,
+      minProperties: 3,
+    }],
+    'style/eol-last': ['off'],
+  },
 })
