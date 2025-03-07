@@ -1,12 +1,15 @@
-import { serve } from '@hono/node-server'
-import { utilities } from '@pnpm-monorepo/utilities'
-import { Hono } from 'hono'
+import { serveStatic } from '@hono/node-server/serve-static'
+import { swaggerUI } from '@hono/swagger-ui'
+import { OpenAPIHono } from '@hono/zod-openapi'
 import { cors } from 'hono/cors'
 import { logger } from 'hono/logger'
 import { prettyJSON } from 'hono/pretty-json'
 import usersRoute from './users'
+import { serve } from '@hono/node-server'
 
-const app = new Hono().basePath('/api')
+const app = new OpenAPIHono()
+
+app.use('/favicon.ico', serveStatic({ root: './src', path: './static/favicon.ico' }))
 
 app.use(prettyJSON())
 
@@ -21,7 +24,17 @@ app.onError((err, c) => {
   return c.text('Internal server error.', 500)
 })
 
-app.get('/', c => c.text('Basic Hono API.'))
+app.doc('/doc', {
+  openapi: '3.0.0',
+  info: {
+    version: '0.0.1',
+    title: 'A REST API using Hono.',
+  },
+})
+
+app.get('/', c => c.text('A REST API using Hono.'))
+
+app.get('/ui', swaggerUI({ url: '/doc' }))
 
 app.route('/users', usersRoute)
 

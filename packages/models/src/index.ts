@@ -1,1 +1,1 @@
-export * from './users'
+export * from '@prisma/client'

@@ -2,7 +2,7 @@
   "name": "@pnpm-monorepo/hono-api",
   "type": "module",
   "version": "0.0.1",
-  "description": "A web rest api using Hono.",
+  "description": "A REST API using Hono.",
   "main": "./dist/index.mjs",
   "scripts": {
     "build": "pkgroll --clean-dist --sourcemap",
@@ -13,7 +13,10 @@
   },
   "dependencies": {
     "@hono/node-server": "^1.13.8",
-    "hono": "^4.7.2"
+    "@hono/swagger-ui": "^0.5.1",
+    "@hono/zod-openapi": "^0.19.2",
+    "hono": "^4.7.2",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@pnpm-monorepo/models": "workspace:*",
