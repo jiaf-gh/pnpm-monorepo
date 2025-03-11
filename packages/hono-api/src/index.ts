@@ -3,21 +3,22 @@ import { serveStatic } from '@hono/node-server/serve-static'
 import { swaggerUI } from '@hono/swagger-ui'
 import { OpenAPIHono } from '@hono/zod-openapi'
 import { cors } from 'hono/cors'
+import { HTTPException } from 'hono/http-exception'
 import { logger } from 'hono/logger'
 import { prettyJSON } from 'hono/pretty-json'
+import { timeout } from 'hono/timeout'
+import { TIMEOUT_MS } from './constants'
 import usersRoute from './users'
 
 const app = new OpenAPIHono()
 
 app.use('/favicon.ico', serveStatic({ root: './src', path: './static/favicon.ico' }))
-
 app.use(prettyJSON())
-
 app.use(logger())
-
 app.use('/*', cors())
+app.use('/*', timeout(TIMEOUT_MS, new HTTPException(408, { message: 'Operation timed out. Please try again later.' })))
 
-app.notFound(c => c.json({ message: 'Route not found.', sucess: false }, 404))
+app.notFound(c => c.text('Route not found.', 404))
 
 app.onError((err, c) => {
   console.error(`${err}`)
@@ -38,10 +39,18 @@ app.get('/ui', swaggerUI({ url: '/doc' }))
 
 app.route('/users', usersRoute)
 
+const hostname = process.env.HOST ?? '0.0.0.0'
+const port = process.env.PORT
+  ? !Number.isNaN(Number.parseInt(process.env.PORT))
+      ? Number.parseInt(process.env.PORT)
+      : 3001
+  : 3001
+
 serve({
   fetch: app.fetch,
-  port: 3000,
+  hostname,
+  port,
 }, (info) => {
   // eslint-disable-next-line no-console
-  console.log(`Server is running on http://localhost:${info.port}`)
+  console.log(`Server is running on http://${info.address}:${info.port}`)
 })

@@ -3,34 +3,39 @@ import {
   OpenAPIHono,
   z,
 } from '@hono/zod-openapi'
+import {
+  MESSAGE_USER_NOT_CREATED,
+  MESSAGE_USER_NOT_FOUND,
+  SWAGGER_TAG,
+} from './constants'
 import database from './database'
+import {
+  responseNotFound,
+  responseValidationError,
+} from './responses'
+import { responseSchemaBadRequest, responseSchemaNotFound } from './schemas'
 
 const app = new OpenAPIHono()
 
-const errorResponse = z.object({
-  sucess: z
-    .boolean()
-    .openapi({ example: false }),
-  code: z
-    .number()
-    .openapi({ example: 400 }),
-  message: z
-    .string()
-    .openapi({ example: 'Error Message' }),
-})
-
-const userResponse = z.object({
-  id: z
-    .number()
-    .openapi({ example: 123 }),
-  name: z
-    .string()
-    .nullable()
-    .openapi({ example: 'John Doe' }),
-  email: z
-    .string()
-    .openapi({ example: 'jondoe@email.com' }),
-})
+const responseSchemaTargetUser = {
+  content: {
+    'application/json': {
+      schema: z.object({
+        id: z
+          .number()
+          .openapi({ example: 123 }),
+        name: z
+          .string()
+          .nullable()
+          .openapi({ example: 'John Doe' }),
+        email: z
+          .string()
+          .openapi({ example: 'jondoe@email.com' }),
+      }),
+    },
+  },
+  description: 'Success',
+}
 
 app.openapi(
   createRoute({
@@ -45,49 +50,25 @@ app.openapi(
       }),
     },
     responses: {
-      200: {
-        content: { 'application/json': { schema: userResponse } },
-        description: 'Success',
-      },
-      400: {
-        content: { 'application/json': { schema: errorResponse } },
-        description: 'Bad Request',
-      },
-      404: {
-        content: { 'application/json': { schema: errorResponse } },
-        description: 'Not Found',
-      },
+      200: responseSchemaTargetUser,
+      400: responseSchemaBadRequest,
+      404: responseSchemaNotFound,
     },
-    tags: ['Users'],
+    tags: [SWAGGER_TAG.USERS],
   }),
   async (c) => {
     const { id } = c.req.valid('param')
-
     const user = await database.user.findUnique({ where: { id: Number.parseInt(id) } })
-
     if (!user) {
-      return c.json(
-        {
-          sucess: false,
-          code: 400,
-          message: 'User not found.',
-        },
-        404,
-      )
+      const response = responseNotFound(MESSAGE_USER_NOT_FOUND)
+      return c.json(response, response.code)
     }
-
     return c.json(user, 200)
   },
   (result, c) => {
     if (!result.success) {
-      return c.json(
-        {
-          sucess: false,
-          code: 400,
-          message: 'Validation Error',
-        },
-        400,
-      )
+      const validationError = responseValidationError(result.error.errors)
+      return c.json(validationError, validationError.code)
     }
   },
 )
@@ -112,24 +93,14 @@ app.openapi(
       },
     },
     responses: {
-      200: {
-        content: { 'application/json': { schema: userResponse } },
-        description: 'Success',
-      },
-      400: {
-        content: { 'application/json': { schema: errorResponse } },
-        description: 'Bad Request',
-      },
-      404: {
-        content: { 'application/json': { schema: errorResponse } },
-        description: 'Not Found',
-      },
+      200: responseSchemaTargetUser,
+      400: responseSchemaBadRequest,
+      404: responseSchemaNotFound,
     },
-    tags: ['Users'],
+    tags: [SWAGGER_TAG.USERS],
   }),
   async (c) => {
     const { name, email } = c.req.valid('json')
-
     const created = await database.user.create({
       data: {
         name,
@@ -137,30 +108,16 @@ app.openapi(
         profile: { create: { bio: 'I like turtles' } },
       },
     })
-
     if (!created) {
-      return c.json(
-        {
-          sucess: false,
-          code: 400,
-          message: 'User not found.',
-        },
-        404,
-      )
+      const notFound = responseNotFound(MESSAGE_USER_NOT_CREATED)
+      return c.json(notFound, notFound.code)
     }
-
     return c.json(created, 200)
   },
   (result, c) => {
     if (!result.success) {
-      return c.json(
-        {
-          sucess: false,
-          code: 400,
-          message: 'Validation Error',
-        },
-        400,
-      )
+      const validationError = responseValidationError(result.error.errors)
+      return c.json(validationError, validationError.code)
     }
   },
 )
