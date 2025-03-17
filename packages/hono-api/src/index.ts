@@ -1,5 +1,6 @@
 import { serve } from '@hono/node-server'
 import { serveStatic } from '@hono/node-server/serve-static'
+import { sentry } from '@hono/sentry'
 import { swaggerUI } from '@hono/swagger-ui'
 import { OpenAPIHono } from '@hono/zod-openapi'
 import { cors } from 'hono/cors'
@@ -23,6 +24,8 @@ app.use(prettyJSON())
 
 app.use(logger())
 
+app.use('/*', sentry({ dsn: process.env.SENTRY_DSN }))
+
 app.use('/*', cors())
 
 app.use('/*', timeout(TIMEOUT_MS, new HTTPException(504, { message: MESSAGE_TIMED_OUT })))
@@ -34,6 +37,7 @@ app.notFound((c) => {
 
 app.onError((err, c) => {
   console.error(`${err}`)
+  c.get('sentry').captureException(err)
   if (err instanceof HTTPException) {
     const response = responseBase.error({ code: err.status, message: err.message })
     return c.json(response, response.code)
