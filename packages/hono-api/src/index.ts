@@ -3,9 +3,17 @@ import { serveStatic } from '@hono/node-server/serve-static'
 import { swaggerUI } from '@hono/swagger-ui'
 import { OpenAPIHono } from '@hono/zod-openapi'
 import { cors } from 'hono/cors'
+import { HTTPException } from 'hono/http-exception'
 import { logger } from 'hono/logger'
 import { prettyJSON } from 'hono/pretty-json'
-import usersRoute from './users'
+import { timeout } from 'hono/timeout'
+import usersRoute from './api/users'
+import {
+  MESSAGE_ROUTE_NOT_FOUND,
+  MESSAGE_TIMED_OUT,
+  TIMEOUT_MS,
+} from './constants'
+import { responseBase, responseNotFound } from './responses'
 
 const app = new OpenAPIHono()
 
@@ -17,11 +25,21 @@ app.use(logger())
 
 app.use('/*', cors())
 
-app.notFound(c => c.json({ message: 'Route not found.', sucess: false }, 404))
+app.use('/*', timeout(TIMEOUT_MS, new HTTPException(504, { message: MESSAGE_TIMED_OUT })))
+
+app.notFound((c) => {
+  const response = responseNotFound(MESSAGE_ROUTE_NOT_FOUND)
+  return c.json(response, response.code)
+})
 
 app.onError((err, c) => {
   console.error(`${err}`)
-  return c.text('Internal server error.', 500)
+  if (err instanceof HTTPException) {
+    const response = responseBase.error({ code: err.status, message: err.message })
+    return c.json(response, response.code)
+  }
+  const response = responseBase.error()
+  return c.json(response, response.code)
 })
 
 app.doc('/doc', {
@@ -32,16 +50,22 @@ app.doc('/doc', {
   },
 })
 
-app.get('/', c => c.text('A REST API using Hono.'))
-
 app.get('/ui', swaggerUI({ url: '/doc' }))
 
 app.route('/users', usersRoute)
 
+const hostname = process.env.HOST ?? '0.0.0.0'
+const port = process.env.PORT
+  ? !Number.isNaN(Number.parseInt(process.env.PORT))
+      ? Number.parseInt(process.env.PORT)
+      : 3001
+  : 3001
+
 serve({
   fetch: app.fetch,
-  port: 3000,
+  hostname,
+  port,
 }, (info) => {
   // eslint-disable-next-line no-console
-  console.log(`Server is running on http://localhost:${info.port}`)
+  console.log(`Server is running on http://${info.address}:${info.port}`)
 })
