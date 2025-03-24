@@ -7,7 +7,8 @@ export default defineNuxtConfig({
     port: 4200,
   },
   typescript: { tsConfig: { extends: '../../tsconfig.base.json' } },
-  modules: ['@nuxt/eslint', '@nuxt/icon', '@nuxt/image'],
+  css: ['~/assets/css/styles.css'],
+  modules: ['@nuxt/eslint', '@nuxt/icon', '@nuxt/image', '@nuxtjs/tailwindcss'],
   eslint: { config: { standalone: false } },
   icon: {
     customCollections: [
@@ -36,4 +37,5 @@ export default defineNuxtConfig({
       },
     },
   },
+  tailwindcss: {},
 })

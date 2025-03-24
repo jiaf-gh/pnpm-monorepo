@@ -1,13 +1,15 @@
 <template>
-  <div>
-    <p>Hello Nuxt</p>
+  <div class="flex flex-col items-start gap-4 h-dvh p-4 overflow-auto">
+    <p class="uppercase font-medium text-primary">
+      Hello Nuxt
+    </p>
     <Icon name="carbon:assembly-cluster" />
     <Icon name="custom:cafe" />
     <NuxtPicture
       src="/images/pink-stealth.png"
       alt="Pink Stealth"
-      width="320px"
-      height="320px"
+      width="256px"
+      height="256px"
       loading="lazy"
       placeholder
     />
@@ -20,5 +22,10 @@
       loading="lazy"
       placeholder
     />
+    <input type="text" class="mt-96 border border-cyan-500">
   </div>
 </template>
+
+<style>
+
+</style>
