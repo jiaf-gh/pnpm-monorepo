@@ -1,3 +1,6 @@
+import { dirname, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
+
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
@@ -6,9 +9,16 @@ export default defineNuxtConfig({
     host: '0.0.0.0',
     port: 4200,
   },
-  typescript: { tsConfig: { extends: '../../tsconfig.base.json' } },
+  typescript: { tsConfig: { extends: resolve(dirname(fileURLToPath(import.meta.url)), '../../tsconfig.base.json') } },
   css: ['~/assets/css/styles.css'],
-  modules: ['@nuxt/eslint', '@nuxt/icon', '@nuxt/image', '@nuxtjs/tailwindcss'],
+  modules: [
+    '@nuxt/eslint',
+    '@nuxt/icon',
+    '@nuxt/image',
+    '@nuxtjs/tailwindcss',
+    '@pinia/nuxt',
+    '@nuxt/fonts',
+  ],
   eslint: { config: { standalone: false } },
   icon: {
     customCollections: [
@@ -38,4 +48,5 @@ export default defineNuxtConfig({
     },
   },
   tailwindcss: {},
+  pinia: { storesDirs: ['./src/stores/**'] },
 })
