@@ -7,8 +7,14 @@ export default defineNuxtConfig({
     port: 4200,
   },
   typescript: { tsConfig: { extends: '../../tsconfig.base.json' } },
-  modules: [
-    '@nuxt/eslint',
-  ],
+  modules: ['@nuxt/eslint', '@nuxt/icon'],
   eslint: { config: { standalone: false } },
+  icon: {
+    customCollections: [
+      {
+        prefix: 'custom',
+        dir: './src/assets/icons',
+      },
+    ],
+  },
 })
