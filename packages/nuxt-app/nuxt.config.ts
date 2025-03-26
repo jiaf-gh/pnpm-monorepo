@@ -10,7 +10,7 @@ export default defineNuxtConfig({
     port: 4200,
   },
   typescript: { tsConfig: { extends: resolve(dirname(fileURLToPath(import.meta.url)), '../../tsconfig.base.json') } },
-  css: ['~/assets/css/styles.css'],
+  css: ['./src/assets/css/styles.css'],
   modules: [
     '@nuxt/eslint',
     '@nuxt/icon',
@@ -18,6 +18,8 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     '@pinia/nuxt',
     '@nuxt/fonts',
+    '@vueuse/nuxt',
+    '@nuxtjs/i18n',
   ],
   eslint: { config: { standalone: false } },
   icon: {
@@ -49,4 +51,30 @@ export default defineNuxtConfig({
   },
   tailwindcss: {},
   pinia: { storesDirs: ['./src/stores/**'] },
+  i18n: {
+    locales: [
+      {
+        name: 'English',
+        code: 'en',
+        language: 'en-US',
+        file: 'en.yaml',
+      },
+      {
+        name: 'Português',
+        code: 'pt',
+        language: 'pt-BR',
+        file: 'pt.yaml',
+      },
+    ],
+    defaultLocale: 'en',
+    restructureDir: false,
+    langDir: 'locales',
+    lazy: true,
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: 'i18n_redirected',
+      redirectOn: 'root',
+    },
+    bundle: { optimizeTranslationDirective: false },
+  },
 })
