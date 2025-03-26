@@ -5,12 +5,28 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
   srcDir: 'src',
-  devServer: {
-    host: '0.0.0.0',
-    port: 4200,
-  },
+  nitro: { preset: 'node-server' },
   typescript: { tsConfig: { extends: resolve(dirname(fileURLToPath(import.meta.url)), '../../tsconfig.base.json') } },
   css: ['./src/assets/css/styles.css'],
+  app: {
+    head: {
+      htmlAttrs: { lang: 'en-US' },
+      meta: [
+        { charset: 'utf-8' },
+        {
+          name: 'viewport',
+          content: 'width=device-width, initial-scale=1',
+        },
+        { name: 'description', content: 'A Nuxt3 Web App.' },
+      ],
+      title: 'Nuxt3 App',
+      link: [{
+        rel: 'icon',
+        type: 'image/x-icon',
+        href: '/favicon.ico',
+      }],
+    },
+  },
   modules: [
     '@nuxt/eslint',
     '@nuxt/icon',
@@ -75,6 +91,7 @@ export default defineNuxtConfig({
       cookieKey: 'i18n_redirected',
       redirectOn: 'root',
     },
+    baseUrl: process.env.BASE_URL,
     bundle: { optimizeTranslationDirective: false },
   },
 })
