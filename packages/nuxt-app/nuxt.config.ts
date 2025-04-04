@@ -7,7 +7,10 @@ export default defineNuxtConfig({
   srcDir: 'src',
   nitro: { preset: 'node-server' },
   typescript: { tsConfig: { extends: resolve(dirname(fileURLToPath(import.meta.url)), '../../tsconfig.base.json') } },
-  css: ['./src/assets/css/styles.css'],
+  css: [
+    '~/assets/css/main.css',
+    '~/assets/css/transitions.css',
+  ],
   app: {
     head: {
       htmlAttrs: { lang: 'en-US' },
@@ -26,6 +29,14 @@ export default defineNuxtConfig({
         href: '/favicon.ico',
       }],
     },
+    pageTransition: {
+      name: 'page',
+      mode: 'out-in',
+    },
+    layoutTransition: {
+      name: 'layout',
+      mode: 'out-in',
+    },
   },
   modules: [
     '@nuxt/eslint',
@@ -42,7 +53,7 @@ export default defineNuxtConfig({
     customCollections: [
       {
         prefix: 'custom',
-        dir: './src/assets/icons',
+        dir: '~/assets/icons',
       },
     ],
   },

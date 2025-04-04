@@ -41,7 +41,7 @@ const theme = getTheme()
     :class="theme.bgColor"
     @click="alertsStore.removeAlert(alert.id)"
   >
-    <Icon :name="theme.icon" :class="theme.iconColor" />
+    <Icon :name="theme.icon" class="flex shrink-0" :class="theme.iconColor" />
     <span class="text-sm/none">{{ alert.message }}</span>
   </button>
 </template>
