@@ -5,6 +5,12 @@ services:
       dockerfile: ./packages/hono-api/Dockerfile
     ports:
       - "3000:3000"
+  express-api:
+    build:
+      context: ./
+      dockerfile: ./packages/express-api/Dockerfile
+    ports:
+      - "4200:4200"
   nuxt-app:
     build:
       context: ./
