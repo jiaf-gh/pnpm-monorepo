@@ -3,7 +3,8 @@
   "targetDefaults": {
     "build": {
       "dependsOn": [
-        "^build"
+        "^build",
+        "build:prepare"
       ],
       "outputs": [
         "{projectRoot}/dist"
