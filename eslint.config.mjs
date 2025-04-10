@@ -7,6 +7,7 @@ export default antfu({
     '**/node_modules/**',
     '**/dist/**',
   ],
+  formatters: { css: true },
 }, {
   rules: {
     'node/prefer-global/process': ['off'],

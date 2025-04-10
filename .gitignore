@@ -4,6 +4,8 @@ dist/
 
 # Env
 .env
+.env.*
+!.env.example
 
 # Logs
 logs/
@@ -12,7 +14,16 @@ pnpm-debug.log*
 
 # Misc
 .DS_Store
+.fleet
+.idea
 
 # Nx
 .nx/cache
 .nx/workspace-data
+
+# Nuxt dev
+.output
+.data
+.nuxt
+.nitro
+.cache

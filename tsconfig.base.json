@@ -2,7 +2,6 @@
   "compilerOptions": {
     "target": "ES2016",
     "lib": ["ESNext", "DOM"],
-    "baseUrl": ".",
     "rootDir": ".",
     "module": "ESNext",
     "moduleResolution": "bundler",
