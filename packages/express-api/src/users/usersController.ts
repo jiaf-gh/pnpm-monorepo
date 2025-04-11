@@ -1,4 +1,4 @@
-import type { User } from '@pnpm-monorepo/models'
+import type { APIResponse, User } from '@pnpm-monorepo/models'
 import type { UserCreationParams } from './usersService'
 import {
   Body,
@@ -17,14 +17,14 @@ export class UsersController extends Controller {
   @Get('{userId}')
   public async getUser(
       @Path() userId: number,
-  ): Promise<User> {
+  ): Promise<APIResponse<User>> {
     return new UsersService().get(userId)
   }
 
   @Post()
   public async createUser(
       @Body() requestBody: UserCreationParams,
-  ): Promise<User> {
+  ): Promise<APIResponse<User>> {
     return new UsersService().create(requestBody)
   }
 }

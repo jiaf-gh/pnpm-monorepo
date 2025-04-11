@@ -1,9 +1,21 @@
-import type { Request as ExRequest, Response as ExResponse } from 'express'
+import type {
+  ErrorRequestHandler,
+  Request as ExRequest,
+  Response as ExResponse,
+  NextFunction,
+} from 'express'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import {
+  APICodes,
+  APIError,
+  APIMessages,
+  APIResponse,
+} from '@pnpm-monorepo/models'
 import express, { urlencoded } from 'express'
 import morgan from 'morgan'
 import swaggerUi from 'swagger-ui-express'
+import { ValidateError } from 'tsoa'
 import { RegisterRoutes } from '../generated/routes'
 
 export const app = express()
@@ -19,3 +31,50 @@ app.use('/docs', swaggerUi.serve, async (_req: ExRequest, res: ExResponse) => {
 })
 
 RegisterRoutes(app)
+
+app.use(notFoundHandler)
+app.use(errorHandler as ErrorRequestHandler)
+
+function notFoundHandler(_req: ExRequest, res: ExResponse) {
+  const status = APICodes.BAD_REQUEST
+  res.status(status).send(APIResponse.error({
+    status,
+    message: APIMessages.ROUTE_NOT_FOUND,
+  }))
+}
+
+function errorHandler(
+  err: unknown,
+  _req: ExRequest,
+  res: ExResponse,
+  next: NextFunction,
+) {
+  console.error(err)
+  if (err instanceof ValidateError) {
+    const status = APICodes.UNPROCESSABLE_ENTITY
+    const message = APIMessages.VALIDATION_FAILED
+    return res.status(status).json(
+      APIResponse.error({
+        status,
+        message,
+        details: err?.fields,
+      }),
+    )
+  }
+  if (err instanceof APIError) {
+    const status = err.code || APICodes.INTERNAL_ERROR
+    return res
+      .status(status)
+      .json(APIResponse.error({
+        status,
+        message: err.message as APIMessages,
+        details: err.details,
+      }))
+  }
+  if (err instanceof Error) {
+    return res
+      .status(APICodes.INTERNAL_ERROR)
+      .json(APIResponse.error({ details: err }))
+  }
+  next()
+}
