@@ -14,17 +14,19 @@ import { UsersService } from './usersService'
 @Tags('Users')
 @Route('users')
 export class UsersController extends Controller {
+  private usersService = new UsersService()
+
   @Get('{userId}')
   public async getUser(
       @Path() userId: number,
   ): Promise<APIResponse<User>> {
-    return new UsersService().get(userId)
+    return this.usersService.get(userId)
   }
 
   @Post()
   public async createUser(
       @Body() requestBody: UserCreationParams,
   ): Promise<APIResponse<User>> {
-    return new UsersService().create(requestBody)
+    return this.usersService.create(requestBody)
   }
 }
