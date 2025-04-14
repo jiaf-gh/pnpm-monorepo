@@ -15,12 +15,14 @@
   "dependencies": {
     "@pnpm-monorepo/models": "workspace:*",
     "@tsoa/runtime": "^6.6.0",
+    "cors": "^2.8.5",
     "express": "^5.1.0",
     "morgan": "^1.10.0",
     "swagger-ui-express": "^5.0.1",
     "tsoa": "^6.6.0"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.17",
     "@types/express": "^5.0.1",
     "@types/morgan": "^1.9.9",
     "@types/node": "^20.11.17",

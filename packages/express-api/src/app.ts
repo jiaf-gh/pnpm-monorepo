@@ -12,6 +12,7 @@ import {
   APIMessages,
   APIResponse,
 } from '@pnpm-monorepo/models'
+import cors from 'cors'
 import express, { urlencoded } from 'express'
 import morgan from 'morgan'
 import swaggerUi from 'swagger-ui-express'
@@ -20,6 +21,7 @@ import { RegisterRoutes } from '../generated/routes'
 
 export const app = express()
 
+app.use(cors())
 app.use(express.json())
 app.use(urlencoded({ extended: true }))
 app.use(express.static(resolve(dirname(fileURLToPath(import.meta.url)), 'public')))
