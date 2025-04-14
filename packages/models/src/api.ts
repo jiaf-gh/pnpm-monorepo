@@ -1,5 +1,6 @@
 export enum APICodes {
   OK = 200,
+  CREATED = 201,
   BAD_REQUEST = 400,
   UNAUTHORIZED = 401,
   NOT_FOUND = 404,
@@ -56,13 +57,13 @@ export class APIResponse<Data = never> {
   }
 
   static success<Data = never>(options?: {
-    status?: APICodes
+    code?: APICodes
     message?: APIMessages
     data?: Data
   },
   ): APIResponse<Data> {
     return new APIResponse<Data>({
-      code: options?.status ?? APICodes.OK,
+      code: options?.code ?? APICodes.OK,
       success: true,
       message: options?.message,
       data: options?.data,
@@ -70,13 +71,13 @@ export class APIResponse<Data = never> {
   }
 
   static error(options?: {
-    status?: APICodes
+    code?: APICodes
     message?: APIMessages
     details?: unknown
   },
   ): APIResponse<never> {
     return new APIResponse<never>({
-      code: options?.status ?? APICodes.INTERNAL_ERROR,
+      code: options?.code ?? APICodes.INTERNAL_ERROR,
       success: false,
       message: options?.message || APIMessages.INTERNAL_SERVER_ERROR,
       details: options?.details,

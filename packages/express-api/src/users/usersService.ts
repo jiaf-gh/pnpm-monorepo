@@ -25,6 +25,10 @@ export class UsersService {
         profile: { create: { bio: 'I like turtles' } },
       },
     })
-    return APIResponse.success({ message: APIMessages.USER_CREATE_SUCCESS, data: created })
+    return APIResponse.success({
+      code: APICodes.CREATED,
+      message: APIMessages.USER_CREATE_SUCCESS,
+      data: created,
+    })
   }
 }

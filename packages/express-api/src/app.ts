@@ -38,7 +38,7 @@ app.use(errorHandler as ErrorRequestHandler)
 function notFoundHandler(_req: ExRequest, res: ExResponse) {
   const status = APICodes.BAD_REQUEST
   res.status(status).send(APIResponse.error({
-    status,
+    code: status,
     message: APIMessages.ROUTE_NOT_FOUND,
   }))
 }
@@ -55,7 +55,7 @@ function errorHandler(
     const message = APIMessages.VALIDATION_FAILED
     return res.status(status).json(
       APIResponse.error({
-        status,
+        code: status,
         message,
         details: err?.fields,
       }),
@@ -66,7 +66,7 @@ function errorHandler(
     return res
       .status(status)
       .json(APIResponse.error({
-        status,
+        code: status,
         message: err.message as APIMessages,
         details: err.details,
       }))
